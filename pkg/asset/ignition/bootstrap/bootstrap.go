@@ -152,6 +152,23 @@ func (a *Bootstrap) Generate(dependencies asset.Parents) error {
 		},
 	}
 
+	coreUser := ignitionUser
+	a.Config.Storage = igntypes.Storage{
+		Links: []igntypes.Link{
+			{
+				Node: igntypes.Node{
+					Path: "/home/core/.ssh/authorized_keys",
+					User: igntypes.NodeUser{
+						Name: &coreUser,
+					},
+				},
+				LinkEmbedded1: igntypes.LinkEmbedded1{
+					Target: "/home/core/.ssh/authorized_keys.d/ignition",
+				},
+			},
+		},
+	}
+
 	err = a.addStorageFiles("/", "bootstrap/files", templateData)
 	if err != nil {
 		return err
